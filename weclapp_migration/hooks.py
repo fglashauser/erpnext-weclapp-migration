@@ -4,7 +4,18 @@ app_publisher = "PC-Giga (Florian Glashauser)"
 app_description = "WeClapp to ERPNext Migration"
 app_email = "info@pc-giga.de"
 app_license = "mit"
-# required_apps = []
+required_apps = ["erpnext"]
+
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [
+            {
+                "module": "Weclapp Migration"
+            }
+        ]
+    }
+]
 
 # Includes in <head>
 # ------------------

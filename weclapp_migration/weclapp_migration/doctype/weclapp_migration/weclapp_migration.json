@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-30 01:19:17.832935",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_migrate_data",
+  "customer",
+  "industry_type",
+  "market_segment",
+  "lead_source",
+  "lead"
+ ],
+ "fields": [
+  {
+   "description": "Check which DocTypes you want to migrate here.",
+   "fieldname": "sb_migrate_data",
+   "fieldtype": "Section Break",
+   "label": "Data to migrate"
+  },
+  {
+   "default": "1",
+   "fieldname": "industry_type",
+   "fieldtype": "Check",
+   "label": "Industry Types (WC: Sectors)"
+  },
+  {
+   "default": "1",
+   "fieldname": "market_segment",
+   "fieldtype": "Check",
+   "label": "Market Segments (WC: Customer Category)"
+  },
+  {
+   "default": "1",
+   "fieldname": "customer",
+   "fieldtype": "Check",
+   "label": "Customers"
+  },
+  {
+   "default": "1",
+   "fieldname": "lead_source",
+   "fieldtype": "Check",
+   "label": "Lead Sources"
+  },
+  {
+   "default": "1",
+   "fieldname": "lead",
+   "fieldtype": "Check",
+   "label": "Leads"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-12-02 22:19:46.342072",
+ "modified_by": "Administrator",
+ "module": "Weclapp Migration",
+ "name": "Weclapp Migration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

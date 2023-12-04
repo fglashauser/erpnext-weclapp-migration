@@ -4,4 +4,4 @@ WeClapp to ERPNext Migration
 
 #### License
 
-mit
+mit# erpnext-weclapp-migration

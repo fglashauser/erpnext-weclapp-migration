@@ -1,0 +1,182 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-25 19:47:44.432992",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_wc_api",
+  "wc_api_base",
+  "column_break_fwyu",
+  "wc_api_token",
+  "sb_mapping_settings",
+  "default_sales_invoice_state",
+  "default_currency",
+  "default_phone_country_code",
+  "bank_account_type",
+  "payment_term",
+  "default_uom",
+  "column_break_lwex",
+  "cost_center",
+  "mode_of_payment",
+  "paid_to_account_type",
+  "taxes_and_charges",
+  "paid_from_account",
+  "paid_to_account"
+ ],
+ "fields": [
+  {
+   "description": "Enter your WeClapp credentials here",
+   "fieldname": "sb_wc_api",
+   "fieldtype": "Section Break",
+   "label": "WeClapp API"
+  },
+  {
+   "description": "e.g. https://your-tenant.weclapp.com/webapp/api/v1/",
+   "fieldname": "wc_api_base",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "API Base-URL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_fwyu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "wc_api_token",
+   "fieldtype": "Password",
+   "in_list_view": 1,
+   "label": "API Token",
+   "reqd": 1
+  },
+  {
+   "description": "Default Settings and general mappings between WeClapp and ERPNext.",
+   "fieldname": "sb_mapping_settings",
+   "fieldtype": "Section Break",
+   "label": "Mapping Settings"
+  },
+  {
+   "description": "Which state should a migrated sales invoice have",
+   "fieldname": "default_sales_invoice_state",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Default Sales Invoice state",
+   "options": "Draft\nSubmitted\nCancelled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "default_currency",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Default Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "default": "49",
+   "description": "Used for phone numbers without country code defined (e.g. \"49\" for Germany)",
+   "fieldname": "default_phone_country_code",
+   "fieldtype": "Int",
+   "label": "Default Phone Country code",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank_account_type",
+   "fieldtype": "Link",
+   "label": "Bank Account type",
+   "options": "Bank Account Type",
+   "reqd": 1
+  },
+  {
+   "description": "Which payment term should be applied to migrated sales invoices",
+   "fieldname": "payment_term",
+   "fieldtype": "Link",
+   "label": "Payment term",
+   "options": "Payment Term",
+   "reqd": 1
+  },
+  {
+   "description": "Default unit for positions in sales doctypes",
+   "fieldname": "default_uom",
+   "fieldtype": "Link",
+   "label": "Default UOM",
+   "options": "UOM",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_lwex",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "options": "Cost Center",
+   "reqd": 1
+  },
+  {
+   "description": "Assigned to transactions of paid invoices (e.g. Cash for simplicity)",
+   "fieldname": "mode_of_payment",
+   "fieldtype": "Link",
+   "label": "Mode of Payment",
+   "options": "Mode of Payment",
+   "reqd": 1
+  },
+  {
+   "description": "Also \"Cash\" for example",
+   "fieldname": "paid_to_account_type",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Paid to account type",
+   "options": "Bank Account Type"
+  },
+  {
+   "description": "Taxes and charges that should be applied as default",
+   "fieldname": "taxes_and_charges",
+   "fieldtype": "Link",
+   "label": "Taxes and charges Template",
+   "options": "Sales Taxes and Charges Template",
+   "reqd": 1
+  },
+  {
+   "description": "Sales Invoices: Default paid from account (e.g. 3250)",
+   "fieldname": "paid_from_account",
+   "fieldtype": "Link",
+   "label": "Paid from account",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "description": "Sales Invoices: Default paid to account (e.g. 1620)",
+   "fieldname": "paid_to_account",
+   "fieldtype": "Link",
+   "label": "Paid to account",
+   "options": "Account",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-12-01 12:15:17.429689",
+ "modified_by": "Administrator",
+ "module": "Weclapp Migration",
+ "name": "Weclapp Migration Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
