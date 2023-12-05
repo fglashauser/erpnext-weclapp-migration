@@ -43,14 +43,13 @@ class WeclappMigration(Document):
 	@frappe.whitelist()
 	def migrate_weclapp_data(self):
 		"""Migrates selected data from Cache to ERPNext."""
-		self.migrate_weclapp_data_job()
-		# frappe.enqueue_doc(
-		# 	"Weclapp Migration",
-		# 	self.name,
-		# 	"migrate_weclapp_data_job",
-		# 	queue="long",
-		# 	timeout=5000
-		# )
+		frappe.enqueue_doc(
+			"Weclapp Migration",
+			self.name,
+			"migrate_weclapp_data_job",
+			queue="long",
+			timeout=5000
+		)
 
 	def migrate_weclapp_data_job(self):
 		with Api() as api:
