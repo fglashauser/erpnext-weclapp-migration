@@ -35,7 +35,7 @@ class LeadMigration(Migration):
 
     def _after_migration(self, wc_obj: dict, en_doc: "frappe.Document"):
         # Contacts
-        contactMigration = ContactMigration(parent_doc=en_doc)
+        contactMigration = ContactMigration(self.api, parent_doc=en_doc)
         self._migrate_linked_docs(contactMigration, en_doc, wc_obj.get("contacts", list()))
         en_doc.reload()
         primary_contact = contactMigration.get_doc_by_wc_id(wc_obj.get("primaryContactId", None))
@@ -60,7 +60,7 @@ class LeadMigration(Migration):
                 "is_primary_contact": True
             }).save()
         # Addresses
-        addrMigration = AddressMigration(parent_doc=en_doc)
+        addrMigration = AddressMigration(self.api, parent_doc=en_doc)
         self._migrate_linked_docs(addrMigration, en_doc, wc_obj.get("addresses", list()))
         en_doc.reload()
         primary_address = addrMigration.get_doc_by_wc_id(wc_obj.get("primaryAddressId", None))

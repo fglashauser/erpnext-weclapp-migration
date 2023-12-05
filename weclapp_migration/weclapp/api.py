@@ -3,6 +3,7 @@ import requests
 from pysondb import PysonDB
 from pathlib import Path
 import shutil
+from datetime import datetime
 
 class Api:
     """Class for accessing WeClapp API and caching data locally."""
@@ -74,6 +75,18 @@ class Api:
         """Gets all cached entities of the given DocType."""
         cache_db = PysonDB(f"{self._get_cache_base()}{doctype}.json")
         return cache_db.get_by_query(query).values() if query else cache_db.get_all().values()
+    
+    def log(self, status: str, message: str, traceback: str = None):
+        """Logs a message to the log DocType."""
+        doc = frappe.get_doc({
+            "doctype": "Weclapp Migration Log",
+            "status": status,
+            "message": message,
+            "traceback": traceback,
+            "datetime": datetime.now()
+        })
+        doc.insert()
+        frappe.db.commit()
 
     def _get_cache_base(self) -> str:
         return f"{frappe.local.site}/private/weclapp_migration/cache/"

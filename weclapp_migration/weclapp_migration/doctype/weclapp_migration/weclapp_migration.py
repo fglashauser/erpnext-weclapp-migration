@@ -36,20 +36,21 @@ class WeclappMigration(Document):
 			for doctype in self.config.wc_doctypes:
 				try:
 					api.cache_doctype(doctype)
-					self.log("Success", f"Successfully cached: {doctype}")
+					api.log("Success", f"Successfully cached: {doctype}")
 				except Exception as e:
-					self.log("Error", f"Error while caching {doctype}", f"{e}")
+					api.log("Error", f"Error while caching {doctype}", f"{e}")
 
 	@frappe.whitelist()
 	def migrate_weclapp_data(self):
 		"""Migrates selected data from Cache to ERPNext."""
-		frappe.enqueue_doc(
-			"Weclapp Migration",
-			self.name,
-			"migrate_weclapp_data_job",
-			queue="long",
-			timeout=5000
-		)
+		self.migrate_weclapp_data_job()
+		# frappe.enqueue_doc(
+		# 	"Weclapp Migration",
+		# 	self.name,
+		# 	"migrate_weclapp_data_job",
+		# 	queue="long",
+		# 	timeout=5000
+		# )
 
 	def migrate_weclapp_data_job(self):
 		with Api() as api:
@@ -64,8 +65,8 @@ class WeclappMigration(Document):
 			industryTypeMig.migrate()
 			marketSegmentMig.migrate()
 			leadSourceMig.migrate()
-			leadMigration.migrate()
 			customerMigration.migrate()
+			leadMigration.migrate()
 			# test_doc = frappe.get_doc({	"doctype": "Customer", "name": "14104"})
 			# test_doc.load_from_db()
 			# print(test_doc)
@@ -79,15 +80,3 @@ class WeclappMigration(Document):
 			# Test: Customers
 			customerMigration = CustomerMigration(api)
 			customerMigration.clear_migrated()
-
-	def log(self, status: str, message: str, traceback: str = None):
-		"""Logs a message to the log DocType."""
-		doc = frappe.get_doc({
-			"doctype": "Weclapp Migration Log",
-			"status": status,
-			"message": message,
-			"traceback": traceback,
-			"datetime": datetime.now()
-		})
-		doc.insert()
-		frappe.db.commit()

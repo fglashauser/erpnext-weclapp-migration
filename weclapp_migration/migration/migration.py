@@ -28,7 +28,7 @@ class Migration(ABC):
         """Executes after the migration of an entity"""
         pass
 
-    def __init__(self, api: Api = None, parent_doc: "frappe.Document" = None):
+    def __init__(self, api: Api, parent_doc: "frappe.Document" = None):
         """Initialize the migration.
 
         Args:
@@ -62,21 +62,9 @@ class Migration(ABC):
                 self._after_migration(obj, en_doc)
                 en_docs.append(en_doc)
             except Exception as e:
-                self.log("Error", f"Error while migrating {self.en_doctype}", f"{e}")
+                self.api.log("Error", f"Error while migrating {self.en_doctype}", f"{e}")
         frappe.db.commit()
         return en_docs
-    
-    def log(self, status: str, message: str, traceback: str = None):
-        """Logs a message to the log DocType."""
-        doc = frappe.get_doc({
-            "doctype": "Weclapp Migration Log",
-            "status": status,
-            "message": message,
-            "traceback": traceback,
-            "datetime": datetime.now()
-        })
-        doc.insert()
-        frappe.db.commit()
     
     def get_doc_by_wc_id(self, wc_id: str) -> "frappe.Document":
         """Gets the ERPNext document by the WeClapp-ID
