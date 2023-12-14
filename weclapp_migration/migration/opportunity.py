@@ -26,6 +26,7 @@ class OpportunityMigration(Migration):
         # -Begründung
         party           = self._party(wc_obj)
         contact         = self._contact(wc_obj)
+        owner           = frappe.get_doc("User", wc_obj.get("responsibleUserUsername", None))
         return {
             "wc_id"                 : wc_obj.get("id", None),
             "name"                  : wc_obj.get("opportunityNumber", None),        # Nummer
@@ -34,10 +35,7 @@ class OpportunityMigration(Migration):
             "contact_person"        : contact.name if contact else None,            # Kontakt
             "custom_title"          : wc_obj.get("name", None),                     # Bezeichnung
             "custom_description"    : wc_obj.get("description", None),              # Beschreibung
-            "opportunity_owner"     : next(iter(frappe.get_all("User",                   # Verantwortlich
-                                        filters={"email": \
-                                        wc_obj.get("responsibleUserUsername", None)})),
-                                        None),                                  
+            "opportunity_owner"     : owner.name if owner else None,                # Verantwortlich                       
             "sales_stage"           : wc_obj.get("salesStageName", None),           # Verkaufsphase
             "status"                : self._status(wc_obj),                         # Status / Verkaufsphase
             "probability"           : wc_obj.get("salesProbability", None),         # Wahrscheinlichkeit
