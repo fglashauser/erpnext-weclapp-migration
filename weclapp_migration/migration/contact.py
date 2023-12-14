@@ -1,7 +1,7 @@
 import frappe
 from .migration import Migration
 from .address import AddressMigration
-from ..tools.data import standardize_phone_number, get_salutation
+from ..tools.data import standardize_phone_number, get_salutation, prepare_email
 import re
 
 class ContactMigration(Migration):
@@ -24,6 +24,22 @@ class ContactMigration(Migration):
             "phone_nos"         : self._phone_nos(wc_obj),
         }
     
+    def _get_tags(self, wc_obj: dict) -> list:
+        pass
+    
+    def _before_clear_migrated(self, en_doc: "frappe.Document"):
+        en_doc.reload()
+        en_doc.update({
+            "address": None
+        }).save()
+        frappe.db.commit()
+        en_doc.reload()
+        en_doc._validate()
+        self._delete_linked_childs(AddressMigration(self.api, parent_doc=en_doc), en_doc)
+
+    def _before_migration(self, wc_obj: dict) -> dict:
+        return wc_obj
+
     def _after_migration(self, wc_obj: dict, en_doc: "frappe.Document"):
         wc_addr = wc_obj.get("addresses", list())
         if len(wc_addr) == 0:
@@ -46,7 +62,7 @@ class ContactMigration(Migration):
         }
 
     def _email_ids(self, wc_obj: dict) -> list:
-        email = wc_obj.get("email", None)
+        email = prepare_email(wc_obj.get("email", None))
         return [{"email_id": email, "is_primary": True}] if email else list()
 
     def _phone_nos(self, wc_obj: dict) -> list:
@@ -58,7 +74,7 @@ class ContactMigration(Migration):
         if phone:
             phone_nos.append({"phone": standardize_phone_number(phone), "is_primary_phone": True})
         if fax:
-            phone_nos.append({"phone": standardize_phone_number(fax), "custom_is_fax_number": True})
+            phone_nos.append({"phone": standardize_phone_number(fax), "is_fax_number": True})
         if mobilePhone1:
             phone_nos.append({"phone": standardize_phone_number(mobilePhone1), "is_primary_mobile_no": True})
         if mobilePhone2:

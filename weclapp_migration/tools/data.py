@@ -1,5 +1,7 @@
 import frappe
+import pytz
 import re
+from datetime import datetime
 
 @staticmethod
 def standardize_phone_number(number: str) -> str:
@@ -44,7 +46,7 @@ def remove_html_tags(text: str) -> str:
     Returns:
         str: Text without HTML tags
     """
-    return re.sub(r'<[^>]*>', '', text) if text else None
+    return re.sub(r'&[^;]+;', '', re.sub(r'<[^>]*>', '', text)) if text else None
 
 @staticmethod
 def get_country_by_code(code: str) -> str:
@@ -77,20 +79,38 @@ def get_salutation(wc_salutation: str, wc_title: str) -> str:
         return "Mr"
     elif wc_salutation == "MRS":
         return "Ms"
-    
-def get_tags(wc_tags: list, wc_topics: list) -> str:
-    """Returns the tags for the given tags and topics.
+
+@staticmethod
+def prepare_email(email: str) -> str:
+    """Prepares the email address for the given email.
+    Replace umlauts and check if the email address is valid.
+    Returns None if the email address is invalid.
 
     Args:
-        wc_tags (list): Tags from Weclapp
-        wc_topics (list): Topics from Weclapp
+        email (str): Email address to prepare
 
     Returns:
-        str: Tags
+        str: Prepared email address
     """
-    tags = list()
-    if wc_tags:
-        tags += wc_tags
-    if wc_topics:
-        tags += [x["name"] for x in wc_topics]
-    return ",".join(tags)
+    if not email:
+        return None
+    email = email.lower().replace("ä", "ae") \
+                            .replace("ö", "oe") \
+                            .replace("ü", "ue") \
+                            .replace("ß", "ss")
+    return email if re.match(r"^\S+@\S+\.\S+$", email) else None
+
+@staticmethod
+def get_date_from_weclapp_ts(timestamp: int) -> str:
+    """Returns a date string from a WeClapp timestamp.
+
+    Args:
+        timestamp (int): WeClapp timestamp
+
+    Returns:
+        str: Date string
+    """
+    if not timestamp:
+        return None
+    system_timezone = frappe.db.get_single_value('System Settings', 'time_zone')
+    return datetime.fromtimestamp(timestamp / 1000, pytz.timezone(system_timezone)).strftime("%Y-%m-%d")

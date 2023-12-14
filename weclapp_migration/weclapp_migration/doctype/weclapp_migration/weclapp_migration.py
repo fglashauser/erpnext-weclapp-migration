@@ -11,7 +11,11 @@ from ....migration.market_segment import MarketSegmentMigration
 from ....migration.lead_source import LeadSourceMigration
 from ....migration.lead import LeadMigration
 from ....migration.salutation import SalutationMigration
-
+from ....migration.uom import UomMigration
+from ....migration.item import ItemMigration
+from ....migration.user import UserMigration
+from ....migration.sales_stage import SalesStageMigration
+from ....migration.opportunity import OpportunityMigration
 
 class WeclappMigration(Document):
 	def __init__(self, *args, **kwargs):
@@ -22,13 +26,14 @@ class WeclappMigration(Document):
 	def cache_weclapp_data(self):
 		"""Caches all data from WeClapp to local cache-database (JSON-files).
 		"""
-		frappe.enqueue_doc(
-			"Weclapp Migration",
-			self.name,
-			"cache_weclapp_data_job",
-			queue="long",
-			timeout=5000
-		)
+		# frappe.enqueue_doc(
+		# 	"Weclapp Migration",
+		# 	self.name,
+		# 	"cache_weclapp_data_job",
+		# 	queue="long",
+		# 	timeout=5000
+		# )
+		self.cache_weclapp_data_job()
 
 	def cache_weclapp_data_job(self):
 		with Api() as api:
@@ -43,13 +48,16 @@ class WeclappMigration(Document):
 	@frappe.whitelist()
 	def migrate_weclapp_data(self):
 		"""Migrates selected data from Cache to ERPNext."""
-		frappe.enqueue_doc(
-			"Weclapp Migration",
-			self.name,
-			"migrate_weclapp_data_job",
-			queue="long",
-			timeout=5000
-		)
+		# frappe.enqueue_doc(
+		# 	"Weclapp Migration",
+		# 	self.name,
+		# 	"migrate_weclapp_data_job",
+		# 	queue="long",
+		# 	timeout=5000
+		# )
+		self.migrate_weclapp_data_job()
+		#lead = frappe.get_doc("Lead", "23247")
+		#print(lead)
 
 	def migrate_weclapp_data_job(self):
 		with Api() as api:
@@ -60,17 +68,30 @@ class WeclappMigration(Document):
 			customerMigration = CustomerMigration(api)
 			leadMigration = LeadMigration(api)
 			salutationMigration = SalutationMigration(api)
+			uomMig = UomMigration(api)
+			itemMig = ItemMigration(api)
+			userMig = UserMigration(api)
+			opportunityMig = OpportunityMigration(api)
+			salesStageMig = SalesStageMigration(api)
+			salesStageMig.migrate()
+			userMig.migrate()
+			uomMig.migrate()
 			salutationMigration.migrate()
 			industryTypeMig.migrate()
 			marketSegmentMig.migrate()
 			leadSourceMig.migrate()
-			customerMigration.migrate()
+			itemMig.migrate()
 			leadMigration.migrate()
+			customerMigration.migrate()
+			opportunityMig.migrate()
+			#customerMigration.migrate()
+			#leadMigration.migrate()
 			# test_doc = frappe.get_doc({	"doctype": "Customer", "name": "14104"})
 			# test_doc.load_from_db()
 			# print(test_doc)
-			# leadMigration.migrate(query=lambda x: x["leadNumber"] == "23110")
-			# customerMigration.migrate(lambda x: x["customerNumber"] == "14104")
+			#leadMigration.migrate(query=lambda x: x["leadNumber"] == "13837")
+			#customerMigration.migrate(lambda x: x["customerNumber"] == "23065")
+			#opportunityMig.migrate(lambda x: x["opportunityNumber"] == "1001")
 
 	@frappe.whitelist()
 	def clear_migrated_data(self):
@@ -78,4 +99,6 @@ class WeclappMigration(Document):
 		with Api() as api:
 			# Test: Customers
 			customerMigration = CustomerMigration(api)
-			customerMigration.clear_migrated()
+			leadMigration = LeadMigration(api)
+			customerMigration.clear_migrated(frappe.get_doc("Customer", "13985"))
+			#leadMigration.clear_migrated()

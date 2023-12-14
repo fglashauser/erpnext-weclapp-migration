@@ -16,6 +16,7 @@
   "bank_account_type",
   "payment_term",
   "default_uom",
+  "default_language",
   "column_break_lwex",
   "cost_center",
   "mode_of_payment",
@@ -154,12 +155,20 @@
    "label": "Paid to account",
    "options": "Account",
    "reqd": 1
+  },
+  {
+   "description": "For Users, Print Formats etc.",
+   "fieldname": "default_language",
+   "fieldtype": "Link",
+   "label": "Default Language",
+   "options": "Language",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-12-01 12:15:17.429689",
+ "modified": "2023-12-13 00:41:09.170459",
  "modified_by": "Administrator",
  "module": "Weclapp Migration",
  "name": "Weclapp Migration Settings",

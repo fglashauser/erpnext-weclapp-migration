@@ -1,6 +1,6 @@
 import frappe
 from .migration import Migration
-from ..tools.data import standardize_phone_number, remove_html_tags, get_salutation, get_tags
+from ..tools.data import standardize_phone_number, remove_html_tags, get_salutation, prepare_email
 from .contact import ContactMigration
 from .address import AddressMigration
 
@@ -24,15 +24,31 @@ class CustomerMigration(Migration):
             "customer_type"                 : self._customer_type(wc_obj),
             "website"                       : wc_obj.get("website", None),
             "tax_id"                        : wc_obj.get("vatRegistrationNumber", None),
-            "custom_phone"                  : standardize_phone_number(wc_obj.get("phone", str())),
-            "custom_email"                  : wc_obj.get("email", None),
+            "phone"                         : standardize_phone_number(wc_obj.get("phone", str())),
+            "email"                         : prepare_email(wc_obj.get("email", None)),
             "industry"                      : wc_obj.get("sectorName", None),
             "market_segment"                : wc_obj.get("customerCategoryName", None),
-            "custom_rating"                 : wc_obj.get("customerRatingName", None),
-            "custom_lead_source"            : wc_obj.get("leadSourceName", None),
-            "customer_details"              : remove_html_tags(wc_obj.get("description", None)),
-            "_user_tags"                    : get_tags(wc_obj.get("tags", None), wc_obj.get("customerTopics", None)),
+            "rating"                        : wc_obj.get("customerRatingName", None),
+            "lead_source"                   : wc_obj.get("leadSourceName", None),
+            "customer_details"              : self._customer_details(wc_obj)
         }
+    
+    def _get_tags(self, wc_obj: dict) -> list:
+        return wc_obj.get("customerTopics", list())
+    
+    def _before_clear_migrated(self, en_doc: "frappe.Document"):
+        en_doc.reload()
+        en_doc.update({
+            "customer_primary_contact": None,
+            "customer_primary_address": None
+        }).save()
+        frappe.db.commit()
+        en_doc.reload()
+        self._delete_linked_childs(ContactMigration(self.api, parent_doc=en_doc), en_doc)
+        self._delete_linked_childs(AddressMigration(self.api, parent_doc=en_doc), en_doc)
+
+    def _before_migration(self, wc_obj: dict) -> dict:
+        return wc_obj
     
     def _after_migration(self, wc_obj: dict, en_doc: "frappe.Document"):
         # Contacts
@@ -69,5 +85,19 @@ class CustomerMigration(Migration):
     
     def _customer_type(self, wc_obj: dict) -> str:
         return "Company" if self._is_company(wc_obj) else "Individual"
+    
+    def _customer_details(self, wc_obj: dict) -> str:
+        details = str()
+        # Description
+        if wc_obj.get("description", None):
+            details += wc_obj.get('description', None)
+        # Notes
+        parties = self.api.get_cache_objects("party", query=lambda x: x["customerNumber"] == wc_obj["customerNumber"])
+        for party in parties:
+            if party.get("customerInternalNote", None):
+                if len(details) > 0:
+                    details += "\n\n-------------------------\n\n"
+                details += party.get("customerInternalNote", None)
+        return remove_html_tags(details)
     
     

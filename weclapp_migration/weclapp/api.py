@@ -76,6 +76,14 @@ class Api:
         cache_db = PysonDB(f"{self._get_cache_base()}{doctype}.json")
         return cache_db.get_by_query(query).values() if query else cache_db.get_all().values()
     
+    def get_cache_documents(self, doctype: str, id: str) -> list[str]:
+        """Gets all cached documents of the given DocType and ID."""
+        base_path = Path(self._get_cache_base()).joinpath(f"documents/{doctype}/{id}/")
+        if base_path.exists():
+            return [str(file) for file in base_path.iterdir()]
+        else:
+            return []
+    
     def log(self, status: str, message: str, traceback: str = None):
         """Logs a message to the log DocType."""
         doc = frappe.get_doc({
