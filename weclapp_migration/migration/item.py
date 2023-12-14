@@ -13,7 +13,7 @@ class ItemMigration(Migration):
     def _get_en_obj(self, wc_obj: dict) -> dict:
         return {
             "wc_id"         : wc_obj.get("id", None),
-            "item_group"    : "Products",
+            "item_group"    : self.api.config.default_item_group,
             "is_stock_item" : False,
             "item_code"     : wc_obj.get("articleNumber", None),
             "item_name"     : wc_obj.get("name", None),

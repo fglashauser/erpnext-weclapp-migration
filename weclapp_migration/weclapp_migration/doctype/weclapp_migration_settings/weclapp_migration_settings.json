@@ -23,7 +23,8 @@
   "paid_to_account_type",
   "taxes_and_charges",
   "paid_from_account",
-  "paid_to_account"
+  "paid_to_account",
+  "default_item_group"
  ],
  "fields": [
   {
@@ -163,12 +164,20 @@
    "label": "Default Language",
    "options": "Language",
    "reqd": 1
+  },
+  {
+   "description": "Item Group for migrated Items",
+   "fieldname": "default_item_group",
+   "fieldtype": "Link",
+   "label": "Default Item Group",
+   "options": "Item Group",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-12-13 00:41:09.170459",
+ "modified": "2023-12-14 20:55:40.171024",
  "modified_by": "Administrator",
  "module": "Weclapp Migration",
  "name": "Weclapp Migration Settings",

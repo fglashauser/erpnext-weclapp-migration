@@ -97,9 +97,17 @@ class WeclappMigration(Document):
 	@frappe.whitelist()
 	def clear_migrated_data(self):
 		"""Clears all migrated data from ERPNext."""
+		frappe.enqueue_doc(
+			"Weclapp Migration",
+			self.name,
+			"clear_migrated_data_job",
+			queue="long",
+			timeout=5000
+		)
+
+	def clear_migrated_data_job(self):
 		with Api() as api:
-			# Test: Customers
 			customerMigration = CustomerMigration(api)
 			leadMigration = LeadMigration(api)
-			customerMigration.clear_migrated(frappe.get_doc("Customer", "13985"))
-			#leadMigration.clear_migrated()
+			#customerMigration.clear_migrated()
+			leadMigration.clear_migrated()
