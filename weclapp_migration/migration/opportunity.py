@@ -26,7 +26,10 @@ class OpportunityMigration(Migration):
         # -Begründung
         party           = self._party(wc_obj)
         contact         = self._contact(wc_obj)
-        owner           = frappe.get_doc("User", wc_obj.get("responsibleUserUsername", None))
+        try:
+            owner       = frappe.get_doc("User", wc_obj.get("responsibleUserUsername", None))
+        except frappe.exceptions.DoesNotExistError as e:
+            owner       = None
         return {
             "wc_id"                 : wc_obj.get("id", None),
             "name"                  : wc_obj.get("opportunityNumber", None),        # Nummer

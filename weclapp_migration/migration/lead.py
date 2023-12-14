@@ -14,7 +14,10 @@ class LeadMigration(Migration):
         return "Lead"
     
     def _get_en_obj(self, wc_obj: dict) -> dict:
-        lead_owner = frappe.get_doc("User", wc_obj.get("responsibleUserUsername", None))
+        try:
+            lead_owner = frappe.get_doc("User", wc_obj.get("responsibleUserUsername", None))
+        except frappe.exceptions.DoesNotExistError as e:
+            lead_owner = None
         return {
             "wc_id"                 : wc_obj.get("id", None),
             "name"                  : wc_obj.get("leadNumber", None),
@@ -32,7 +35,9 @@ class LeadMigration(Migration):
             "status"                : self._status(wc_obj),
             "qualification_status"  : self._qualification_status(wc_obj),
             "notes"                 : self._notes(wc_obj),
-            "lead_owner"            : lead_owner.name if lead_owner else None,
+            "lead_owner"            : lead_owner.name if \
+                lead_owner and lead_owner.name != wc_obj.get("email", None) \
+                else None,
         }
     
     def _get_tags(self, wc_obj: dict) -> list:

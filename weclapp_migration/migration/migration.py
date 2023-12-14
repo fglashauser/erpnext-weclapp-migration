@@ -85,7 +85,7 @@ class Migration(ABC):
                 print(msg, e, sep="\n")
                 self.api.log("Error", msg, e)
             except frappe.exceptions.DoesNotExistError as e:
-                msg = f"Parent document not found for {self.en_doctype} with WeClapp-ID {obj.get('id', None)}"
+                msg = f"Child document not found for {self.en_doctype} with WeClapp-ID {obj.get('id', None)}"
                 print(msg, e, sep="\n")
                 self.api.log("Error", msg, e)
             # except Exception as e:

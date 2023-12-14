@@ -16,7 +16,10 @@ class CustomerMigration(Migration):
         return "Customer"
 
     def _get_en_obj(self, wc_obj: dict) -> dict:
-        account_manager = frappe.get_doc("User", wc_obj.get("responsibleUserUsername", None))
+        try:
+            account_manager = frappe.get_doc("User", wc_obj.get("responsibleUserUsername", None))
+        except frappe.exceptions.DoesNotExistError as e:
+            account_manager = None
         return {
             "wc_id"                         : wc_obj.get("id", None),
             "name"                          : wc_obj.get("customerNumber", None),
@@ -32,7 +35,9 @@ class CustomerMigration(Migration):
             "rating"                        : wc_obj.get("customerRatingName", None),
             "lead_source"                   : wc_obj.get("leadSourceName", None),
             "customer_details"              : self._customer_details(wc_obj),
-            "account_manager"               : account_manager.name if account_manager else None
+            "account_manager"               : account_manager.name if \
+                account_manager and account_manager.name != wc_obj.get("email", None) \
+                else None
         }
     
     def _get_tags(self, wc_obj: dict) -> list:
