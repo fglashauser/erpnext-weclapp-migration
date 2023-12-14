@@ -30,7 +30,8 @@ class CustomerMigration(Migration):
             "market_segment"                : wc_obj.get("customerCategoryName", None),
             "rating"                        : wc_obj.get("customerRatingName", None),
             "lead_source"                   : wc_obj.get("leadSourceName", None),
-            "customer_details"              : self._customer_details(wc_obj)
+            "customer_details"              : self._customer_details(wc_obj),
+            "account_manager"               : wc_obj.get("responsibleUserUsername", None)
         }
     
     def _get_tags(self, wc_obj: dict) -> list:

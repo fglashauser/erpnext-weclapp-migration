@@ -26,14 +26,14 @@ class WeclappMigration(Document):
 	def cache_weclapp_data(self):
 		"""Caches all data from WeClapp to local cache-database (JSON-files).
 		"""
-		# frappe.enqueue_doc(
-		# 	"Weclapp Migration",
-		# 	self.name,
-		# 	"cache_weclapp_data_job",
-		# 	queue="long",
-		# 	timeout=5000
-		# )
-		self.cache_weclapp_data_job()
+		frappe.enqueue_doc(
+			"Weclapp Migration",
+			self.name,
+			"cache_weclapp_data_job",
+			queue="long",
+			timeout=5000
+		)
+		#self.cache_weclapp_data_job()
 
 	def cache_weclapp_data_job(self):
 		with Api() as api:
@@ -48,20 +48,17 @@ class WeclappMigration(Document):
 	@frappe.whitelist()
 	def migrate_weclapp_data(self):
 		"""Migrates selected data from Cache to ERPNext."""
-		# frappe.enqueue_doc(
-		# 	"Weclapp Migration",
-		# 	self.name,
-		# 	"migrate_weclapp_data_job",
-		# 	queue="long",
-		# 	timeout=5000
-		# )
-		self.migrate_weclapp_data_job()
-		#lead = frappe.get_doc("Lead", "23247")
-		#print(lead)
+		frappe.enqueue_doc(
+			"Weclapp Migration",
+			self.name,
+			"migrate_weclapp_data_job",
+			queue="long",
+			timeout=5000
+		)
+		#self.migrate_weclapp_data_job()
 
 	def migrate_weclapp_data_job(self):
 		with Api() as api:
-			# Test: Leads
 			industryTypeMig = IndustryTypeMigration(api)
 			marketSegmentMig = MarketSegmentMigration(api)
 			leadSourceMig = LeadSourceMigration(api)
@@ -73,6 +70,8 @@ class WeclappMigration(Document):
 			userMig = UserMigration(api)
 			opportunityMig = OpportunityMigration(api)
 			salesStageMig = SalesStageMigration(api)
+
+
 			salesStageMig.migrate()
 			userMig.migrate()
 			uomMig.migrate()
@@ -84,13 +83,15 @@ class WeclappMigration(Document):
 			leadMigration.migrate()
 			customerMigration.migrate()
 			opportunityMig.migrate()
+
+
 			#customerMigration.migrate()
 			#leadMigration.migrate()
 			# test_doc = frappe.get_doc({	"doctype": "Customer", "name": "14104"})
 			# test_doc.load_from_db()
 			# print(test_doc)
-			#leadMigration.migrate(query=lambda x: x["leadNumber"] == "13837")
-			#customerMigration.migrate(lambda x: x["customerNumber"] == "23065")
+			#leadMigration.migrate(query=lambda x: x["leadNumber"] == "23073")
+			#customerMigration.migrate(lambda x: x["customerNumber"] == "13977")
 			#opportunityMig.migrate(lambda x: x["opportunityNumber"] == "1001")
 
 	@frappe.whitelist()

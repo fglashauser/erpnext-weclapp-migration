@@ -30,7 +30,8 @@ class LeadMigration(Migration):
             "market_segment"        : wc_obj.get("customerCategoryName", None),
             "status"                : self._status(wc_obj),
             "qualification_status"  : self._qualification_status(wc_obj),
-            "notes"                 : self._notes(wc_obj)
+            "notes"                 : self._notes(wc_obj),
+            "lead_owner"            : wc_obj.get("responsibleUserUsername", None)
         }
     
     def _get_tags(self, wc_obj: dict) -> list:
