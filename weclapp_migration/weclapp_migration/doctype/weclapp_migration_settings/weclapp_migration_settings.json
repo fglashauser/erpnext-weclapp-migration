@@ -17,6 +17,8 @@
   "payment_term",
   "default_uom",
   "default_language",
+  "default_territory",
+  "default_opportunity_type",
   "column_break_lwex",
   "cost_center",
   "mode_of_payment",
@@ -24,7 +26,8 @@
   "taxes_and_charges",
   "paid_from_account",
   "paid_to_account",
-  "default_item_group"
+  "default_item_group",
+  "default_customer_group"
  ],
  "fields": [
   {
@@ -172,12 +175,33 @@
    "label": "Default Item Group",
    "options": "Item Group",
    "reqd": 1
+  },
+  {
+   "fieldname": "default_territory",
+   "fieldtype": "Link",
+   "label": "Default Territory",
+   "options": "Territory",
+   "reqd": 1
+  },
+  {
+   "fieldname": "default_customer_group",
+   "fieldtype": "Link",
+   "label": "Default Customer Group",
+   "options": "Customer Group",
+   "reqd": 1
+  },
+  {
+   "fieldname": "default_opportunity_type",
+   "fieldtype": "Link",
+   "label": "Default Opportunity Type",
+   "options": "Opportunity Type",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-12-14 20:55:40.171024",
+ "modified": "2023-12-15 09:48:36.053937",
  "modified_by": "Administrator",
  "module": "Weclapp Migration",
  "name": "Weclapp Migration Settings",

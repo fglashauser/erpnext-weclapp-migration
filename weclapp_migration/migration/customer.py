@@ -35,6 +35,8 @@ class CustomerMigration(Migration):
             "rating"                        : wc_obj.get("customerRatingName", None),
             "lead_source"                   : wc_obj.get("leadSourceName", None),
             "customer_details"              : self._customer_details(wc_obj),
+            "customer_group"                : self.api.config.default_customer_group,
+            "territory"                     : self.api.config.default_territory,
             "account_manager"               : account_manager.name if \
                 account_manager and account_manager.name != wc_obj.get("email", None) \
                 else None

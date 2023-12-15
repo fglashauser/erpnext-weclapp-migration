@@ -46,6 +46,7 @@ class OpportunityMigration(Migration):
                 wc_obj.get("expectedSignatureDate", None)),                         # Erwartetes Unterschriftsdatum
             "opportunity_amount"    : wc_obj.get("revenue", None),                  # Umsatz
             "hot_lead"              : wc_obj.get("hotLead", False),                 # Hot Lead (Y/N)
+            "opportunity_type"      : self.api.config.default_opportunity_type
         }
     
     def _get_tags(self, wc_obj: dict) -> list:
