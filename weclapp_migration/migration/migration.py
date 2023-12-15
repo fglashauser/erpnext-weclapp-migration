@@ -88,6 +88,14 @@ class Migration(ABC):
                 msg = f"Child document not found for {self.en_doctype} with WeClapp-ID {obj.get('id', None)}"
                 print(msg, e, sep="\n")
                 self.api.log("Error", msg, e)
+            except frappe.exceptions.ValidationError as e:
+                msg = f"Validation error for {self.en_doctype} with WeClapp-ID {obj.get('id', None)}"
+                print(msg, e, sep="\n")
+                self.api.log("Error", msg, e)
+            except Exception as e:
+                msg = f"Error while migrating {self.en_doctype} with WeClapp-ID {obj.get('id', None)}"
+                print(msg, e, sep="\n")
+                self.api.log("Error", msg, e)
             # except Exception as e:
             #     print(f"Error while migrating {self.en_doctype}")
             #     print(e)
