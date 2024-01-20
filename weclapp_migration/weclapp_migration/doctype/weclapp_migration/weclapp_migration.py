@@ -72,17 +72,17 @@ class WeclappMigration(Document):
 			salesStageMig = SalesStageMigration(api)
 
 
-			salesStageMig.migrate()
-			userMig.migrate()
-			uomMig.migrate()
-			salutationMigration.migrate()
-			industryTypeMig.migrate()
-			marketSegmentMig.migrate()
-			leadSourceMig.migrate()
-			itemMig.migrate()
+			# salesStageMig.migrate()
+			# userMig.migrate()
+			# uomMig.migrate()
+			# salutationMigration.migrate()
+			# industryTypeMig.migrate()
+			# marketSegmentMig.migrate()
+			# leadSourceMig.migrate()
+			# itemMig.migrate()
 			leadMigration.migrate()
-			customerMigration.migrate()
-			opportunityMig.migrate()
+			# customerMigration.migrate()
+			# opportunityMig.migrate()
 
 
 			#customerMigration.migrate()

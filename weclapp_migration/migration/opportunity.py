@@ -100,9 +100,10 @@ class OpportunityMigration(Migration):
             "Open"      : ["Qualifikation"],
             "Quotation" : ["Erstes Angebot erstellt"],
             "Converted" : ["Annahme unter Vorbehalt", 
-                           "Auftrag erzeugt"],
+                           "Auftrag erzeugt",
+                           "Gewonnen"],
             "Lost"      : ["Verloren"],
             "Replied"   : ["Erste Kontaktaufnahme"],
-            "Closed"    : ["Gewonnen"]
+            "Closed"    : []
         }
         return next((k for k, v in map.items() if ss in v), default)

@@ -114,3 +114,18 @@ def get_date_from_weclapp_ts(timestamp: int) -> str:
         return None
     system_timezone = frappe.db.get_single_value('System Settings', 'time_zone')
     return datetime.fromtimestamp(timestamp / 1000, pytz.timezone(system_timezone)).strftime("%Y-%m-%d")
+
+@staticmethod
+def get_datetime_from_weclapp_ts(timestamp: int) -> str:
+    """Returns a datetime string from a WeClapp timestamp.
+
+    Args:
+        timestamp (int): WeClapp timestamp
+
+    Returns:
+        str: Datetime string
+    """
+    if not timestamp:
+        return None
+    system_timezone = frappe.db.get_single_value('System Settings', 'time_zone')
+    return datetime.fromtimestamp(timestamp / 1000, pytz.timezone(system_timezone)).strftime("%Y-%m-%d %H:%M:%S")
