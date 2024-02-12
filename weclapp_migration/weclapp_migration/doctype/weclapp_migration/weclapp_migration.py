@@ -80,7 +80,7 @@ class WeclappMigration(Document):
 			# marketSegmentMig.migrate()
 			# leadSourceMig.migrate()
 			# itemMig.migrate()
-			leadMigration.migrate()
+			#leadMigration.migrate()
 			# customerMigration.migrate()
 			# opportunityMig.migrate()
 
